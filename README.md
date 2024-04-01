@@ -1,6 +1,11 @@
 # cppvis
 
-C++ Data Visualization Platform
+[![GitHub License](https://img.shields.io/github/license/rekola/cppvis?logo=github&logoColor=lightgrey&color=yellow)](https://github.com/rekola/cppvis/blob/main/LICENSE)
+[![CI](https://github.com/rekola/cppvis/workflows/Ubuntu-CI/badge.svg)]()
+[![VS17-CI](https://github.com/rekola/cppvis/workflows/VS17-CI/badge.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
+## C++ Data Visualization Platform
 
 Work in progress!
 
