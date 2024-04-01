@@ -27,10 +27,10 @@ Most features are still unimplemented.
 // pr prints EDN by default
 
 std::map<std::string, char> M;
-M.insert_or_assign("Key1", 'a');
-M.insert_or_assign("Key2", 'b');
+M.insert_or_assign("key1", 'a');
+M.insert_or_assign("key2", 'b');
 cppvis::prn(M);
-//=> { "Key1" \a, "Key2" \b }
+//=> { "key1" \a, "key2" \b }
 
 // Matlab style plot (not implemented)
 

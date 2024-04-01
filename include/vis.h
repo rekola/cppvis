@@ -238,7 +238,7 @@ namespace cppvis {
 	pr_set(out, item);
       } else if constexpr (is_specialization<T, std::map>().value ||
 			   is_specialization<T, std::unordered_map>().value) {
-	pr_Map(out, item);
+	pr_map(out, item);
       }
     }
   };

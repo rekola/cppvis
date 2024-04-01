@@ -21,3 +21,13 @@ TEST_CASE( "pr with string", "[pr_string]" ) {
   cppvis::pr(s, std::string("Hello world!"));
   REQUIRE(s.str() == "\"Hello world!\"");
 }
+
+TEST_CASE( "pr with map", "[pr_map]") {
+  std::map<std::string, int> M;
+  M.insert_or_assign("key1", 1);
+  M.insert_or_assign("key2", 2);
+
+  std::ostringstream s;
+  cppvis::pr(s, M);
+  REQUIRE(s.str() == "{ \"key1\" 1, \"key2\" 2 }");
+}
