@@ -39,8 +39,7 @@ namespace cppvis {
       out << item;
     }
 
-    template <typename T>
-    void pr_char(std::ostream & out, const T &item) {
+    void pr_char(std::ostream & out, char item) {
       switch (item) {
       case ' ': out << "\\space"; break;
       case '\n': out << "\\newline"; break;
@@ -51,6 +50,10 @@ namespace cppvis {
       default:
 	out << "\\" << item;
       }
+    }
+
+    void pr_bool(std::ostream & out, bool item) {
+      out << (item ? "true" : "false");
     }
 
     template <typename T>
@@ -175,11 +178,11 @@ namespace cppvis {
 
     template <typename T, typename Y>
     void pr_pair(std::ostream & out, const std::pair<T, Y> &item) {
-      out << "[";
+      out << "[ ";
       pr_all(out, item.first);
       out << " ";
       pr_all(out, item.second);
-      out << "]";      
+      out << " ]";
     }
   
     template <typename ...T>
@@ -206,8 +209,9 @@ namespace cppvis {
     void pr_all(std::ostream & out, const T &item) {
       if constexpr (std::is_same<T, char>().value) {
 	pr_char(out, item);
+      } else if constexpr (std::is_same<T, bool>().value) {
+	pr_bool(out, item);
       } else if constexpr (std::is_arithmetic<T>().value ||
-			   std::is_same<T, bool>().value ||
 			   std::is_enum<T>().value) {
 	pr_scalar(out, item);
       } else if constexpr (std::is_same<T, std::string>().value ||

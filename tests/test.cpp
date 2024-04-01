@@ -22,7 +22,7 @@ TEST_CASE( "pr with string", "[pr_string]" ) {
   REQUIRE(s.str() == "\"Hello world!\"");
 }
 
-TEST_CASE( "pr with map", "[pr_map]") {
+TEST_CASE( "pr with map", "[pr_map]" ) {
   std::map<std::string, int> M;
   M.insert_or_assign("key1", 1);
   M.insert_or_assign("key2", 2);
@@ -30,4 +30,16 @@ TEST_CASE( "pr with map", "[pr_map]") {
   std::ostringstream s;
   cppvis::pr(s, M);
   REQUIRE(s.str() == "{ \"key1\" 1, \"key2\" 2 }");
+}
+
+TEST_CASE( "pr with pair", "[pr_pair]" ) {
+  std::ostringstream s;
+  cppvis::pr(s, std::pair(' ', -10.1f));
+  REQUIRE(s.str() == "[ \\space -10.1 ]");
+}
+
+TEST_CASE( "pr with tuple", "[pr_tuple]" ) {
+  std::ostringstream s;
+  cppvis::pr(s, std::tuple('a', 10.1, false));
+  REQUIRE(s.str() == "[ \\a 10.1 false ]");
 }
