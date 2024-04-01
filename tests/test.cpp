@@ -3,6 +3,7 @@
 #include "vis.h"
 
 #include <sstream>
+#include <any>
 
 TEST_CASE( "pr with float vector", "[pr_float_vector]" ) {
   std::ostringstream s;
@@ -14,6 +15,12 @@ TEST_CASE( "pr with char vector", "[pr_char_vector]" ) {
   std::ostringstream s;
   cppvis::pr(s, std::vector<char>{ 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' });
   REQUIRE(s.str() == "[ \\H \\e \\l \\l \\o \\space \\W \\o \\r \\l \\d ]");
+}
+
+TEST_CASE( "pr with heterogeneous vector", "[pr_heterogeneous_vector]" ) {
+  std::ostringstream s;
+  cppvis::pr(s, std::vector<std::any>{ 'a', 10.1, false });
+  REQUIRE(s.str() == "[ \\a 10.1 false ]");
 }
 
 TEST_CASE( "pr with string", "[pr_string]" ) {
