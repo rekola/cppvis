@@ -40,6 +40,20 @@ namespace cppvis {
     }
 
     template <typename T>
+    void pr_char(std::ostream & out, const T &item) {
+      switch (item) {
+      case ' ': out << "\\space"; break;
+      case '\n': out << "\\newline"; break;
+      case '\r': out << "\\return"; break;
+      case '\t': out << "\\tab"; break;
+      case '\f': out << "\\formfeed"; break;
+      case '\b': out << "\\backspace"; break;
+      default:
+	out << "\\" << item;
+      }
+    }
+
+    template <typename T>
     void pr_string(std::ostream & out, const T &item) {
       const char *str;
       size_t size;
@@ -190,10 +204,11 @@ namespace cppvis {
 
     template <typename T>
     void pr_all(std::ostream & out, const T &item) {
-      if constexpr (std::is_arithmetic<T>().value ||
-		    std::is_same<T, bool>().value ||
-		    std::is_enum<T>().value ||
-		    std::is_same<T, char>().value) {
+      if constexpr (std::is_same<T, char>().value) {
+	pr_char(out, item);
+      } else if constexpr (std::is_arithmetic<T>().value ||
+			   std::is_same<T, bool>().value ||
+			   std::is_enum<T>().value) {
 	pr_scalar(out, item);
       } else if constexpr (std::is_same<T, std::string>().value ||
 			   std::is_same<T, char *>().value ||
