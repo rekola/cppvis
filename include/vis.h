@@ -19,8 +19,15 @@
 #include <memory>
 #include <cmath>
 
-#ifndef WIN32
+#ifdef WIN32
+
+#include <io.h>
+#define isatty _isatty
+
+#else
+
 #include <unistd.h>
+
 #endif
 
 namespace cppvis {
