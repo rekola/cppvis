@@ -3,7 +3,7 @@
 #include "vis.h"
 
 #include <sstream>
-#include <any>
+#include <limits>
 
 TEST_CASE( "prn with cout", "[prn_cout]" ) {
   cppvis::prn(std::tuple( 1, 'a', false ));
@@ -53,4 +53,12 @@ TEST_CASE( "pr with tuple", "[pr_tuple]" ) {
   std::ostringstream s;
   cppvis::pr(s, std::tuple('a', 10.1, false));
   REQUIRE(s.str() == "[ \\a 10.1 false ]");
+}
+
+TEST_CASE( "infinity and nan", "[inf_and_nan]" ) {
+  std::ostringstream s;
+  cppvis::pr(s, std::tuple(std::numeric_limits<float>::quiet_NaN(),
+			   std::numeric_limits<float>::infinity(),
+			   -std::numeric_limits<float>::infinity()));
+  REQUIRE(s.str() == "[ ##NaN ##Inf ##-Inf ]");
 }

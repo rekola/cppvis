@@ -17,6 +17,7 @@
 #include <unordered_set>
 #include <tuple>
 #include <memory>
+#include <cmath>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -67,9 +68,24 @@ namespace cppvis {
     }
     
     template <typename T>
-    void edn_pr_scalar(std::ostream & out, const T &item) {
+    void edn_pr_integer(std::ostream & out, const T &item) {
       set_color(out, 0.5f, 0.62f, 0.5f);
       out << item;
+      restore(out);
+    }
+
+    template <typename T>
+    void edn_pr_real(std::ostream & out, const T &item) {
+      set_color(out, 0.5f, 0.62f, 0.5f);
+      if (std::isnan(item)) {
+	out << "##NaN";
+      } else if (!std::isinf(item)) {
+	out << item;
+      } else if (item > 0) {
+	out << "##Inf";
+      } else {
+	out << "##-Inf";
+      }
       restore(out);
     }
 
@@ -253,11 +269,17 @@ namespace cppvis {
       } else if (item.type() == typeid(char)) {
 	edn_pr_char(out, std::any_cast<char>(item));
       } else if (item.type() == typeid(float)) {
-	edn_pr_scalar(out, std::any_cast<float>(item));
+	edn_pr_real(out, std::any_cast<float>(item));
       } else if (item.type() == typeid(double)) {
-	edn_pr_scalar(out, std::any_cast<double>(item));
+	edn_pr_real(out, std::any_cast<double>(item));
+      } else if (item.type() == typeid(short)) {
+	edn_pr_integer(out, std::any_cast<short>(item));
       } else if (item.type() == typeid(int)) {
-	edn_pr_scalar(out, std::any_cast<int>(item));
+	edn_pr_integer(out, std::any_cast<int>(item));
+      } else if (item.type() == typeid(long)) {
+	edn_pr_integer(out, std::any_cast<long>(item));
+      } else if (item.type() ==typeid(long long)) {
+	edn_pr_integer(out, std::any_cast<long long>(item));
       } else if (item.type() == typeid(bool)) {
 	edn_pr_bool(out, std::any_cast<bool>(item));
       }
@@ -272,9 +294,11 @@ namespace cppvis {
 	edn_pr_char(out, item);
       } else if constexpr (std::is_same<T, bool>().value) {
 	edn_pr_bool(out, item);
+      } else if constexpr (std::is_floating_point<T>().value) {
+	edn_pr_real(out, item);
       } else if constexpr (std::is_arithmetic<T>().value ||
 			   std::is_enum<T>().value) {
-	edn_pr_scalar(out, item);
+	edn_pr_integer(out, item);
       } else if constexpr (std::is_same<T, std::string>().value ||
 			   std::is_same<T, char *>().value ||
 			   std::is_same<T, const char *>().value) {
