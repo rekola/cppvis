@@ -132,17 +132,8 @@ namespace cppvis {
       set_color(out, 0.8f, 0.58f, 0.58f);
       out << "\"";
       for (size_t i = 0; i < size; i++) {
-	switch ((unsigned char)str[i]) {
-	case 0 ... 7:
-	case 11 ... 12:
-	case 14 ... 31:
-	case 127:
-	  {
-	    char buf[7];
-	    snprintf(buf, sizeof(buf), "\\u%.4x", (unsigned char)str[i]);
-	    out << buf;
-	  }
-	  break;
+	auto c = static_cast<unsigned char>(str[i]);
+	switch (c) {
 	case '\n':
 	  out << "\\n";
 	  break;
@@ -162,7 +153,13 @@ namespace cppvis {
 	  out << "\\\\";
 	  break;
 	default:
-	  out << str[i];
+	  if (c < 32 || c == 127) {
+	    char buf[7];
+	    snprintf(buf, sizeof(buf), "\\u%.4x", (unsigned char)str[i]);
+	    out << buf;
+	  } else {
+	    out << str[i];
+	  }
 	}
       }
       out << "\"";
