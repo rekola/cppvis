@@ -9,17 +9,21 @@
 
 Work in progress!
 
-# Plans
+## Features
 
-- Pretty printing C++ data types in different notations (e.g. JSON, EDN)
-- Syntax highlighting for pretty printing
+- Pretty printing of C++ data structures in terminal with True Color
+
+## Plans
+
+- Image rendering (inline and block)
+- Different notations for pretty printing (e.g. JSON, EDN)
 - Different renderers (Terminal+Kitty/Sixel, PDF, Qt)
 - Plotting and sparklines
 - Interactivity
-- Graph visualization 
+- Graph visualization
 - Dataframes and SQL
 
-# Example Code
+## Example Code
 
 Most features are still unimplemented.
 
