@@ -18,6 +18,10 @@
 #include <tuple>
 #include <memory>
 
+#ifndef WIN32
+#include <unistd.h>
+#endif
+
 namespace cppvis {
   
   namespace impl {
@@ -35,12 +39,42 @@ namespace cppvis {
     template <typename T>
     void edn_pr(std::ostream & out, const T &item);
 
+    inline bool is_tty(std::ostream & out) {
+      return &out == &std::cout && isatty(1);
+    }
+    
+    inline void restore(std::ostream & out) {
+#ifndef WIN32
+      if (is_tty(out)) {
+	out << "\033[00m";
+      }
+#endif
+    }
+
+    inline int clamp(int v, int min, int max) {
+      return v < min ? min : v > max ? max : v;
+    }
+
+    inline void set_color(std::ostream & out, float red, float green, float blue) {
+#ifndef WIN32
+      if (is_tty(out)) {
+	out << "\033[38;2;"
+	    << clamp(static_cast<int>(red * 255), 0, 255) << ";"
+	    << clamp(static_cast<int>(green * 255), 0, 255) << ";"
+	    << clamp(static_cast<int>(blue * 255), 0, 255) << "m";
+      }
+#endif
+    }
+    
     template <typename T>
     void edn_pr_scalar(std::ostream & out, const T &item) {
+      set_color(out, 0.5f, 0.62f, 0.5f);
       out << item;
+      restore(out);
     }
 
     void edn_pr_char(std::ostream & out, char item) {
+      set_color(out, 0.8f, 0.58f, 0.58f);
       switch (item) {
       case ' ': out << "\\space"; break;
       case '\n': out << "\\newline"; break;
@@ -51,10 +85,13 @@ namespace cppvis {
       default:
 	out << "\\" << item;
       }
+      restore(out);
     }
 
     void edn_pr_bool(std::ostream & out, bool item) {
+      set_color(out, 0.86f, 0.55f, 0.76f);
       out << (item ? "true" : "false");
+      restore(out);
     }
 
     template <typename T>
@@ -69,6 +106,7 @@ namespace cppvis {
 	str = item;
 	size = strlen(item);
       }
+      set_color(out, 0.8f, 0.58f, 0.58f);
       out << "\"";
       for (size_t i = 0; i < size; i++) {
 	switch ((unsigned char)str[i]) {
@@ -105,6 +143,7 @@ namespace cppvis {
 	}
       }
       out << "\"";
+      restore(out);
     }
 
     template <typename T>
@@ -199,10 +238,12 @@ namespace cppvis {
 
     template <typename T>
     void edn_pr_optional(std::ostream & out, const T &item) {
-      if (item == nullptr) {
+      if (item) {
 	edn_pr(out, *item);
       } else {
+	set_color(out, 0.86f, 0.55f, 0.76f);
 	out << "nil";
+	restore(out);
       }
     }
 

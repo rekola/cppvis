@@ -5,6 +5,10 @@
 #include <sstream>
 #include <any>
 
+TEST_CASE( "prn with cout", "[prn_cout]" ) {
+  cppvis::prn(std::tuple( 1, 'a', false ));
+}
+
 TEST_CASE( "pr with float vector", "[pr_float_vector]" ) {
   std::ostringstream s;
   cppvis::pr(s, std::vector<float>{ 1.0f, 2.0f, 3.0f });
